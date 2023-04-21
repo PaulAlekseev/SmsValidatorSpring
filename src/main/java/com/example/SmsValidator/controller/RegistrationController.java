@@ -31,7 +31,7 @@ public class RegistrationController {
         return ResponseEntity.ok(service.register(request));
     }
 
-    @PostMapping("/verify/{key}")
+    @GetMapping("/verify/{key}")
     public ResponseEntity<?> verify(@PathVariable String key)
             throws UserNotFoundException, NoSuchPaddingException, IllegalBlockSizeException, NoSuchAlgorithmException, BadPaddingException, RequestIsOutdatedException, InvalidKeyException, CouldNotValidateUser {
         return ResponseEntity.ok(service.verify(key));

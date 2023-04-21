@@ -28,12 +28,6 @@ public class ModemEntity {
     private Boolean busy = false;
     @Column(name = "services", nullable = false)
     private String services = "";
-//    private Date reservedUntil = Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-    @Column(name = "country", nullable = false)
-    private String country;
-    @Column(name = "countryCode", nullable = false)
-    private String countryCode;
     @Column(name = "reservedUntil", nullable = false)
     private Date reservedUntil = new Date();
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,6 +36,10 @@ public class ModemEntity {
 
     @OneToMany(cascade = CascadeType.DETACH, mappedBy = "modemEntity")
     private Set<TaskEntity> taskEntity;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "country")
+    private CountryEntity countryEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "modem_provider_session")

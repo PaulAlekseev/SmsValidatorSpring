@@ -41,6 +41,7 @@ public class SocketService {
     private final UserRepository userRepository;
     private final JwtTokenProvider tokenProvider;
     private final PaymentService paymentService;
+    private final CountryService countryService;
 
     public TaskEntity getTaskById(Long id) {
         return taskEntityRepository.findById(id).get();
@@ -182,23 +183,13 @@ public class SocketService {
     }
 
     public List<ModemEntity> saveNewModems(List<ModemEntity> modems) {
-        List<String> existingNumbers = modemEntityRepository.findByPhoneNumberIn(modems
-                        .stream()
-                        .map(ModemEntity::getPhoneNumber)
-                        .collect(Collectors.toList())
-                )
+        List<ModemEntity> newModems = modemService.getNotExistingModems(modems);
+        Map<String, CountryEntity> mapImsiCountry = countryService.getCountriesMap();
+        List<ModemEntity> resultModems = newModems
                 .stream()
-                .map(ModemEntity::getPhoneNumber)
+                .peek((modem) -> modem.setCountryEntity(mapImsiCountry.get(modem.getIMSI())))
+                .filter((modem) -> modem.getCountryEntity() != null)
                 .toList();
-        List<ModemEntity> resultModems = modems
-                .stream()
-                .filter(m -> !existingNumbers.contains(m.getPhoneNumber()))
-                .toList();
-        for (ModemEntity modem : resultModems) {
-            CountryFind.Country country = CountryFind.findCountry(modem.getIMSI().substring(0, 3));
-            modem.setCountry(country.getCountryName());
-            modem.setCountryCode(country.getCountryCode());
-        }
         return (List<ModemEntity>) modemEntityRepository.saveAll(resultModems);
     }
 

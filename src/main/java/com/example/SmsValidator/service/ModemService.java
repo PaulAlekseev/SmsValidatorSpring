@@ -121,4 +121,21 @@ public class ModemService {
                 .orElseThrow(() -> new UserNotFoundException("User not found", this.getClass())));
     }
 
+    public List<ModemEntity> getNotExistingModems(List<ModemEntity> modems) {
+        {
+            List<String> existingNumbers = modemEntityRepository.findByPhoneNumberIn(modems
+                            .stream()
+                            .map(ModemEntity::getPhoneNumber)
+                            .collect(Collectors.toList())
+                    )
+                    .stream()
+                    .map(ModemEntity::getPhoneNumber)
+                    .toList();
+            return modems
+                    .stream()
+                    .filter(m -> !existingNumbers.contains(m.getPhoneNumber()))
+                    .toList();
+        }
+    }
+
 }

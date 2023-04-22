@@ -8,4 +8,5 @@ public class ServiceTypeBaseDto {
     private String name;
     private Integer allowedAmount;
     private Integer daysBetween;
+    private Float cost;
 }

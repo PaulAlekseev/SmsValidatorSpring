@@ -10,6 +10,7 @@ public class ServiceMappingUtils {
         serviceBaseDto.setName(serviceTypeEntity.getName());
         serviceBaseDto.setAllowedAmount(serviceTypeEntity.getAllowedAmount());
         serviceBaseDto.setDaysBetween(serviceTypeEntity.getDaysBetween());
+        serviceBaseDto.setCost(serviceTypeEntity.getCost());
         return serviceBaseDto;
     }
 }
